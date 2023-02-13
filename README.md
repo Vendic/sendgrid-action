@@ -6,13 +6,13 @@ Sendgrid `dynamic_template_data` can be passed using the `dynamic_template_data`
 
 ```yaml
 - name: Send sendgrid email
-  uses: Vendic/sendgrid-email-action@v1
+  uses: Vendic/sendgrid-action@v1
   env:
     name: 'John Doe'
     email: 'john@doe.com'
     message: 'Hello world!'
   with:
-    api_key: ${{ secrets.SENDGRID_API_KEY }}
+    sendgrid_api_key: ${{ secrets.SENDGRID_API_KEY }}
     from: 'from@email.com'
     to: 'to@email.com'
     template-id: 'd-1234567890'

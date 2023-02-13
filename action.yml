@@ -17,6 +17,9 @@ inputs:
   template-id:
     description: The ID of the Sendgrid template
     required: true
+  dynamic_template_data:
+    description: The dynamic template data
+    required: false
 
 
 
