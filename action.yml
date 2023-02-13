@@ -1,0 +1,22 @@
+name: 'sendgrid-action'
+description: 'Send a Sendgrid message'
+author: 'Tjitse-E'
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
+inputs:
+  sendgrid_api_key:
+    description: Your Sendgrid API key
+    required: true
+  to:
+    description: The email addresses of the recipients
+    required: true
+  from:
+    description: The email address of the sender
+    required: true
+  template-id:
+    description: The ID of the Sendgrid template
+    required: true
+
+
+

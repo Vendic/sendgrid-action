@@ -1,0 +1,5 @@
+node_modules
+.idea
+*~
+coverage/
+__tests__/send_email.test.ts
