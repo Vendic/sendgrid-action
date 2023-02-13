@@ -14,7 +14,7 @@ inputs:
   from:
     description: The email address of the sender
     required: true
-  template-id:
+  template_id:
     description: The ID of the Sendgrid template
     required: true
   dynamic_template_data:
