@@ -26,7 +26,7 @@ export default async function run(): Promise<void> {
         const sgMail = require('@sendgrid/mail');
         sgMail.setApiKey(sendgridApiKey);
         const msg = {
-            to: to,
+            to: to.split(','),
             from: from,
             templateId: templateId,
             dynamicTemplateData: {
