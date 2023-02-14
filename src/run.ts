@@ -1,4 +1,6 @@
 import * as core from '@actions/core'
+import {Response} from "@sendgrid/helpers/classes";
+import {ClientResponse} from "@sendgrid/client/src/response";
 
 type DynamicData = {
     [key: string]: string
@@ -20,6 +22,7 @@ export default async function run(): Promise<void> {
             if (!process.env[item]) {
                 return;
             }
+            core.info(`Adding dynamic data: ${item} = ${process.env[item]}`)
             dynamicData[item] = process.env[item] as string;
         })
 
@@ -35,18 +38,21 @@ export default async function run(): Promise<void> {
         };
 
         try {
-            await sgMail.send(msg);
+            const result : ClientResponse = await sgMail.send(msg);
+            if (Array.isArray(result)) {
+                result.forEach((item: Response) => {
+                    core.info(`Email sent successfully. Status code: ${item.statusCode}`);
+                })
+            }
         } catch (error) {
-            console.error(error);
+            const isError = (err: unknown): err is Error => err instanceof Error;
 
-            // @ts-ignore
-            if (error.response) {
-                // @ts-ignore
-                console.error(error.response.body)
+            if (isError(error)) {
+                core.error(`Error message: ${error.message}`)
             }
         }
 
-        core.setOutput('message', 'Email sent successfully')
+        core.info('Email sent successfully')
     } catch (error) {
         core.setFailed(`Action failed: ${error}`)
     }
