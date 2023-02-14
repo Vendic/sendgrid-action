@@ -9930,12 +9930,13 @@ async function run() {
             if (!process.env[item]) {
                 return;
             }
+            core.info(`Adding dynamic data: ${item} = ${process.env[item]}`);
             dynamicData[item] = process.env[item];
         });
         const sgMail = __nccwpck_require__(6390);
         sgMail.setApiKey(sendgridApiKey);
         const msg = {
-            to: to,
+            to: to.split(','),
             from: from,
             templateId: templateId,
             dynamicTemplateData: {
@@ -9943,17 +9944,20 @@ async function run() {
             }
         };
         try {
-            await sgMail.send(msg);
-        }
-        catch (error) {
-            console.error(error);
-            // @ts-ignore
-            if (error.response) {
-                // @ts-ignore
-                console.error(error.response.body);
+            const result = await sgMail.send(msg);
+            if (Array.isArray(result)) {
+                result.forEach((item) => {
+                    core.info(`Email sent successfully. Status code: ${item.statusCode}`);
+                });
             }
         }
-        core.setOutput('message', 'Email sent successfully');
+        catch (error) {
+            const isError = (err) => err instanceof Error;
+            if (isError(error)) {
+                core.error(`Error message: ${error.message}`);
+            }
+        }
+        core.info('Email sent successfully');
     }
     catch (error) {
         core.setFailed(`Action failed: ${error}`);
